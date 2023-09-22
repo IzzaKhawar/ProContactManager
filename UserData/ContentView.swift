@@ -6,7 +6,6 @@
 //
 import CoreData
 import SwiftUI
-
 struct PersonView: View {
     
     
@@ -14,17 +13,45 @@ struct PersonView: View {
     @State private var selectedPerson: Person?
     @State private var userSelected: Bool = false
     @Environment(\.presentationMode) var presentationMode
-    
+    @State var selectedCase : ListView = .employed
     init(viewModel: PersonViewModel) {
         self.viewModel = viewModel
     }
     var body: some View {
         NavigationView {
+            VStack {
+                // Picker to select the sectioning criteria
+                Picker("Section By:", selection: $selectedCase) {
+                    ForEach([ListView.profession, ListView.name, ListView.email, ListView.employed], id: \.self) { criteria in
+                        Text(criteria.rawValue.capitalized).tag(criteria)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+                ListSectionView(sectionedPersons: sectionedPersons)
+                    .scrollContentBackground(.hidden)
+            }
+            .navigationTitle("Persons")
+            .toolbar {
+                NavigationLink(destination: AddUserView(viewModel: viewModel), label: {
+                    Image(systemName: "plus")
+                })
+            }
+        }
+    }
+    private var sectionedPersons: [SectionedPersons] {
+            viewModel.getSectionedPersonsList(viewBy: selectedCase) ?? []
+        }
+}
+    struct ListSectionView: View {
+        var sectionedPersons: [SectionedPersons]
+
+        var body: some View {
             List {
-                ForEach(sectionedPersons, id: \.isEmployed) { section in
-                    Section(header: Text(section.isEmployed ? "Employed" : "Unemployed")) {
-                        ForEach(section.persons, id: \.self) { person in
-                            VStack{
+                ForEach(sectionedPersons, id: \.sectioner) { section in
+                    Section(header: Text(section.sectioner)) {
+                        ForEach(section.persons, id: \.id) { person in
+                            VStack {
                                 HStack {
                                     Text(person.name ?? "")
                                     Spacer()
@@ -35,18 +62,12 @@ struct PersonView: View {
                                     Text(person.phoneNumber ?? "")
                                     Spacer()
                                     Text(person.employed ? "Employed" : "Unemployed")
-                                    
-                                    
                                 }
                                 .scrollContentBackground(.hidden)
-                                HStack (alignment: .center, spacing: 2.0, content: {
-                                    
+                                HStack(alignment: .center, spacing: 2.0) {
                                     Button(action: {
                                         // Set the selectedPerson when the Edit button is pressed
-                                        self.selectedPerson = person
-                                        // Trigger the navigation by setting userSelected to true
-                                        self.userSelected.toggle()
-                                        self.presentationMode.wrappedValue.dismiss()
+                                        // Handle Edit button action
                                     }) {
                                         Text("Edit")
                                             .padding(.all, 20.0)
@@ -57,14 +78,14 @@ struct PersonView: View {
                                                 Color.blue
                                                     .shadow(radius: 10)
                                             )
-                                            .cornerRadius(/*@START_MENU_TOKEN@*/15.0/*@END_MENU_TOKEN@*/)
-                                            .shadow(radius: /*@START_MENU_TOKEN@*/14/*@END_MENU_TOKEN@*/)
+                                            .cornerRadius(15.0)
+                                            .shadow(radius: 14)
                                     }
                                     .buttonStyle(PlainButtonStyle())
                                     .padding()
+                                    
                                     Button(action: {
-                                        viewModel.deletePerson(person)
-                                        self.presentationMode.wrappedValue.dismiss()
+                                        // Handle Delete button action
                                     }) {
                                         Text("Delete")
                                             .padding(.all, 20.0)
@@ -75,42 +96,27 @@ struct PersonView: View {
                                                 Color.red
                                                     .shadow(radius: 10)
                                             )
-                                            .cornerRadius(/*@START_MENU_TOKEN@*/15.0/*@END_MENU_TOKEN@*/)
-                                            .shadow(radius: /*@START_MENU_TOKEN@*/14/*@END_MENU_TOKEN@*/)
-                                        
-                                    }                            .buttonStyle(PlainButtonStyle())
-                                        .padding()
-                                    
-                                })
-                                .padding(.horizontal, 60.0)
-                                
-                                .scrollContentBackground(.hidden)
-                                NavigationLink(destination: EditPersonView(viewModel: viewModel, person: selectedPerson ?? person), isActive: $userSelected) {
-                                    EmptyView()
+                                            .cornerRadius(15.0)
+                                            .shadow(radius: 14)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    .padding()
                                 }
+                                .padding(.horizontal, 60.0)
+                                .scrollContentBackground(.hidden)
                             }
                         }
                     }
                 }
-                
             }
-            .scrollContentBackground(.hidden)
-                .navigationTitle("Persons")
-                .toolbar {
-                    NavigationLink(destination: AddUserView(viewModel: viewModel), label: {
-                        Image(systemName: "plus")
-                    })
-                }
         }
     }
-        private var sectionedPersons: [SectionedPersons] {
-            viewModel.getSectionedPersonsList() ?? []
-        }
+
+
+
+struct PersonView_Previews: PreviewProvider {
+    static var previews: some View {
+        let viewModel = PersonViewModel() // Create an instance of PersonViewModel
+        return PersonView(viewModel: viewModel)
     }
-    
-    struct PersonView_Previews: PreviewProvider {
-        static var previews: some View {
-            let viewModel = PersonViewModel() // Create an instance of PersonViewModel
-            return PersonView(viewModel: viewModel)
-        }
-    }
+}

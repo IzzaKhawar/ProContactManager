@@ -9,8 +9,12 @@ import SwiftUI
 import CoreData
 import UIKit
 
+enum ListView: String {
+    case profession, name, email, employed
+}
+
 struct SectionedPersons {
-    let isEmployed: Bool
+    let sectioner: String
     let persons: [Person]
 }
 class PersonViewModel: ObservableObject {
@@ -30,45 +34,68 @@ class PersonViewModel: ObservableObject {
         self.loadPersons()
     }
 
-    func getSectionedPersonsList() -> [SectionedPersons]? {
-        var sectionedPersonsList = [SectionedPersons]()
+    func getSectionedPersonsList(viewBy criteria: ListView) -> [SectionedPersons]? {
+         var sectionedPersonsList = [SectionedPersons]()
 
-        guard let per = persistentContainer else {
-            return sectionedPersonsList
-        }
+         guard let per = persistentContainer else {
+             return sectionedPersonsList
+         }
 
-        let managedContext = per.viewContext
+         let managedContext = per.viewContext
 
-        let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
+         let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
 
-        let sortDescriptor = NSSortDescriptor(key: "employed", ascending: true)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+         let sortDescriptor: NSSortDescriptor
 
-        do {
-            let persons = try managedContext.fetch(fetchRequest)
-            var sectionedPersonsDictionary = [Bool: [Person]]()
+         switch criteria {
+         case .profession:
+             sortDescriptor = NSSortDescriptor(key: "profession", ascending: true)
+         case .name:
+             sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+         case .email:
+             sortDescriptor = NSSortDescriptor(key: "email", ascending: true)
+         case .employed:
+             sortDescriptor = NSSortDescriptor(key: "employed", ascending: true)
+         }
 
-            for person in persons {
-                let isEmployed = person.employed
+         fetchRequest.sortDescriptors = [sortDescriptor]
 
-                if sectionedPersonsDictionary[isEmployed] == nil {
-                    sectionedPersonsDictionary[isEmployed] = [Person]()
-                }
+         do {
+             let persons = try managedContext.fetch(fetchRequest)
+             var sectionedPersonsDictionary = [String: [Person]]()
 
-                sectionedPersonsDictionary[isEmployed]?.append(person)
-            }
+             for person in persons {
+                 let sectioner: String
 
-            for (isEmployed, personsInSection) in sectionedPersonsDictionary {
-                let sectionedPersons = SectionedPersons(isEmployed: isEmployed, persons: personsInSection)
-                sectionedPersonsList.append(sectionedPersons)
-            }
+                 switch criteria {
+                 case .profession:
+                     sectioner = person.profession ?? "Unknown"
+                 case .name:
+                     sectioner = person.name ?? "Unknown"
+                 case .email:
+                     sectioner = person.email ?? "Unknown"
+                 case .employed:
+                     sectioner = person.employed ? "Employed" : "Unemployed"
+                 }
 
-            return sectionedPersonsList
-        } catch let error as NSError {
-            debugPrint("Error fetching data: \(error.localizedDescription)")
-            return nil
-        }
-    }
+                 if sectionedPersonsDictionary[sectioner] == nil {
+                     sectionedPersonsDictionary[sectioner] = [Person]()
+                 }
+
+                 sectionedPersonsDictionary[sectioner]?.append(person)
+             }
+
+             for (sectioner, personsInSection) in sectionedPersonsDictionary {
+                 let sectionedPersons = SectionedPersons(sectioner: sectioner, persons: personsInSection)
+                 sectionedPersonsList.append(sectionedPersons)
+             }
+
+             return sectionedPersonsList
+         } catch let error as NSError {
+             debugPrint("Error fetching data: \(error.localizedDescription)")
+             return nil
+         }
+     }
     
     private func loadPersons() {
         guard let per = persistentContainer else{
