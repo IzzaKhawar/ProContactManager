@@ -6,53 +6,83 @@
 //
 import CoreData
 import SwiftUI
+
 struct PersonView: View {
-    
-    
-    @ObservedObject var viewModel: PersonViewModel
+    @ObservedObject var viewModel = PersonViewModel()
     @State private var selectedPerson: Person?
     @State private var userSelected: Bool = false
     @Environment(\.presentationMode) var presentationMode
-    @State var selectedCase : ListView = .all
-    init(viewModel: PersonViewModel) {
-        self.viewModel = viewModel
-    }
+    @State var selectedCase: ListView = .all
+    @State var navigateToAddUser = false
+    @State var isDeleted: Bool = false
     
     var body: some View {
         NavigationView {
-            // Picker to select the sectioning criteria
-            Picker("Section By:", selection: $selectedCase) {
-                ForEach([ListView.all,
-                         ListView.name,
-                         ListView.email,
-                         ListView.profession,
-                         ListView.employed], id: \.self) { criteria in
-                    Text(criteria.rawValue.capitalized).tag(criteria)
+            VStack {
+                // Picker to select the sectioning criteria
+                Picker("Section By:", selection: $selectedCase) {
+                    ForEach([ListView.all,
+                             ListView.name,
+                             ListView.email,
+                             ListView.profession,
+                             ListView.employed], id: \.self) { criteria in
+                        Text(criteria.rawValue.capitalized).tag(criteria)
+                    }
+                }
+                .padding(.horizontal, 10.0)
+                .frame(height: 20, alignment: .top)
+                .pickerStyle(SegmentedPickerStyle())
+                .navigationTitle("Persons")
+                .toolbar {
+                    NavigationLink(destination: AddUserView(viewModel: viewModel), label: {
+                        Image(systemName: "plus")
+                    })
+                }
+                
+                if selectedCase.rawValue == "all" {
+                    List {
+                        ForEach(viewModel.persons, id: \.id) { person in
+                            VStack {
+                                PersonInfoView(person: person)
+                                Spacer()
+                                ActionButtonsView(viewModel: viewModel, person: person)
+                                
+                            }
+                            .id(person.id)
+                        }
+                    }
+                } else {
+                    List {
+                        ForEach(sectionedPersons, id: \.sectioner) { section in
+                            Section(header: Text(section.sectioner)
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundColor(Color.black)
+                            ) {
+                                ForEach(section.persons, id: \.id) { person in
+                                    VStack {
+                                        PersonInfoView(person: person)
+                                        Spacer()
+                                        ActionButtonsView(viewModel: viewModel, person: person)
+                                        
+                                    }
+                                    .id(person.id)
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            .padding(.horizontal, 10.0)
-            .frame(height: 20 , alignment: .top)
-            .pickerStyle(SegmentedPickerStyle())
-            .navigationTitle("Persons")
-            .toolbar {
-                NavigationLink(destination: AddUserView(viewModel: viewModel), label: {
-                    Image(systemName: "plus")
-                })
-            }
-        }
-        .frame( height: /*@START_MENU_TOKEN@*/190.0/*@END_MENU_TOKEN@*/ , alignment: .top)
-        if (selectedCase.rawValue == "all") {
-            ListedView(viewModel: viewModel)
-        }
-        else{
-            ListSectionView(viewModel: viewModel,sectionedPersons: sectionedPersons)
-                .scrollContentBackground(.hidden)
         }
     }
+    
     private var sectionedPersons: [SectionedPersons] {
         viewModel.getSectionedPersonsList(viewBy: selectedCase) ?? []
     }
+    
 }
+
+
 
 struct PersonInfoView: View {
     var person: Person
@@ -74,6 +104,22 @@ struct PersonInfoView: View {
     }
 }
 
+//struct FillButton: View {
+//    let title: String
+//    let color: Color
+//    let onSubmit: () -> Void
+//    var body: some View {
+//        Button(action: {onSubmit()}, label: {
+//            Text(title)
+//                .frame(height: 56)
+//                .frame(maxWidth: .infinity)
+//                .background(color)
+//                .cornerRadius(16)
+//                .foregroundColor(.white)
+//                .font(.headline)
+//        })
+//    }
+//}
 struct ActionButtonsView: View {
     @ObservedObject var viewModel: PersonViewModel
     @State private var userSelected: Bool = false
@@ -83,7 +129,7 @@ struct ActionButtonsView: View {
     var person: Person
     
     var body: some View {
-        HStack (alignment: .center, spacing: 2.0, content: {
+        HStack (alignment: .center, spacing: 4, content: {
             
             Button(action: {
                 // Set the selectedPerson when the Edit button is pressed
@@ -93,105 +139,41 @@ struct ActionButtonsView: View {
                 self.presentationMode.wrappedValue.dismiss()
             }) {
                 Text("Edit")
-                    .padding(.horizontal, 30.0)
-                    .padding(/*@START_MENU_TOKEN@*/.vertical, 20.0/*@END_MENU_TOKEN@*/)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .frame(height: 56)
+                    .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
+                    .font(.headline)
                     .background(
                         Color.blue
-                            .shadow(radius: 10)
                     )
-                    .cornerRadius(/*@START_MENU_TOKEN@*/15.0/*@END_MENU_TOKEN@*/)
-                    .shadow(radius: /*@START_MENU_TOKEN@*/14/*@END_MENU_TOKEN@*/)
+                    .cornerRadius(16)
+
                 
             }
-            .frame(width: 100.0, height: 40.0)
             .buttonStyle(PlainButtonStyle())
-            .padding()
             Button(action: {
                 viewModel.deletePerson(person)
                 isDeleted.toggle()
                 self.presentationMode.wrappedValue.dismiss()
             }) {
                 Text("Delete")
-                    .padding(.all, 20.0)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
+                    .frame(height: 56)
+                    .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
+                    .font(.headline)
                     .background(
                         Color.red
-                            .shadow(radius: 10)
                     )
-                    .cornerRadius(/*@START_MENU_TOKEN@*/15.0/*@END_MENU_TOKEN@*/)
-                    .shadow(radius: /*@START_MENU_TOKEN@*/14/*@END_MENU_TOKEN@*/)
+                    .cornerRadius(16)
+
                 
-            }  .frame(width: 100.0, height: 40.0)
-                .buttonStyle(PlainButtonStyle())
-                .padding()
+            }
             
         })
-        .padding(.horizontal, 60.0)
-        
-        .scrollContentBackground(.hidden)
         NavigationLink("",destination: EditPersonView(viewModel: viewModel, person: selectedPerson ?? person), isActive: $userSelected)
         
-            .padding(.horizontal, 60.0)
-            .scrollContentBackground(.hidden)
-        
     }
 }
-
-struct ListSectionView: View {
-    @ObservedObject var viewModel: PersonViewModel
-    var sectionedPersons: [SectionedPersons]
-    @State private var userSelected: Bool = false
-    @Environment(\.presentationMode) var presentationMode
-    @State private var selectedPerson: Person?
-    @State private var isDeleted: Bool = false
-    
-    var body: some View {
-        NavigationView {
-            List {
-                ForEach(sectionedPersons, id: \.sectioner) { section in
-                    Section(header: Text(section.sectioner)) {
-                        ForEach(section.persons, id: \.id) { person in
-                            VStack {
-                                PersonInfoView(person: person)
-                                ActionButtonsView(viewModel: viewModel, person: person)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-struct ListedView: View{
-    @ObservedObject var viewModel: PersonViewModel = PersonViewModel()
-    @State private var selectedPerson: Person?
-    @State private var userSelected: Bool = false
-    @Environment(\.presentationMode) var presentationMode
-    init(viewModel: PersonViewModel) {
-        self.viewModel = viewModel
-    }
-    var body: some View {
-        NavigationView{
-            List {
-                ForEach(viewModel.persons, id: \.id) { person in
-                    VStack {
-                        PersonInfoView(person: person)
-                        ActionButtonsView(viewModel: viewModel, person: person)
-                    }
-                }
-            } .scrollContentBackground(.hidden)
-        }
-    }
-}
-
-
-
-
 struct PersonView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = PersonViewModel() // Create an instance of PersonViewModel

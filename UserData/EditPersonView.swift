@@ -28,11 +28,11 @@ struct EditPersonView: View {
     
     var body: some View {
         Form {
-            TextField("Name", text: $name)
-            TextField("Email", text: $email)
-            TextField("Phone Number", text: $phoneNumber)
-            TextField("Profession", text: $profession)
-            Toggle("Employed", isOn: $isEmployed)
+            TextField("Name : ", text: $name)
+            TextField("Email : ", text: $email)
+            TextField("Phone Number : ", text: $phoneNumber)
+            TextField("Profession : ", text: $profession)
+            Toggle("Employed : ", isOn: $isEmployed)
             Button("Save"){
                 
             }
@@ -54,6 +54,9 @@ struct EditPersonView: View {
             .cornerRadius(/*@START_MENU_TOKEN@*/15.0/*@END_MENU_TOKEN@*/)
             .shadow(radius: /*@START_MENU_TOKEN@*/14/*@END_MENU_TOKEN@*/)
         }
+//        .grayscale(0.20)
+//        .font(.subheadline)
+//        .fontWeight(.semibold)
         .frame(height: 350)
         .scrollContentBackground(.hidden)
         
