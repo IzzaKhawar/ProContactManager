@@ -10,7 +10,7 @@ import CoreData
 import UIKit
 
 enum ListView: String {
-    case profession, name, email, employed
+    case profession, name, email, employed ,all
 }
 
 struct SectionedPersons {
@@ -33,69 +33,75 @@ class PersonViewModel: ObservableObject {
     init() {
         self.loadPersons()
     }
-
+    
     func getSectionedPersonsList(viewBy criteria: ListView) -> [SectionedPersons]? {
-         var sectionedPersonsList = [SectionedPersons]()
-
-         guard let per = persistentContainer else {
-             return sectionedPersonsList
-         }
-
-         let managedContext = per.viewContext
-
-         let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
-
-         let sortDescriptor: NSSortDescriptor
-
-         switch criteria {
-         case .profession:
-             sortDescriptor = NSSortDescriptor(key: "profession", ascending: true)
-         case .name:
-             sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
-         case .email:
-             sortDescriptor = NSSortDescriptor(key: "email", ascending: true)
-         case .employed:
-             sortDescriptor = NSSortDescriptor(key: "employed", ascending: true)
-         }
-
-         fetchRequest.sortDescriptors = [sortDescriptor]
-
-         do {
-             let persons = try managedContext.fetch(fetchRequest)
-             var sectionedPersonsDictionary = [String: [Person]]()
-
-             for person in persons {
-                 let sectioner: String
-
-                 switch criteria {
-                 case .profession:
-                     sectioner = person.profession ?? "Unknown"
-                 case .name:
-                     sectioner = person.name ?? "Unknown"
-                 case .email:
-                     sectioner = person.email ?? "Unknown"
-                 case .employed:
-                     sectioner = person.employed ? "Employed" : "Unemployed"
-                 }
-
-                 if sectionedPersonsDictionary[sectioner] == nil {
-                     sectionedPersonsDictionary[sectioner] = [Person]()
-                 }
-
-                 sectionedPersonsDictionary[sectioner]?.append(person)
-             }
-
-             for (sectioner, personsInSection) in sectionedPersonsDictionary {
-                 let sectionedPersons = SectionedPersons(sectioner: sectioner, persons: personsInSection)
-                 sectionedPersonsList.append(sectionedPersons)
-             }
-
-             return sectionedPersonsList
-         } catch let error as NSError {
-             debugPrint("Error fetching data: \(error.localizedDescription)")
-             return nil
-         }
-     }
+        var sectionedPersonsList = [SectionedPersons]()
+        
+        guard let per = persistentContainer else {
+            return sectionedPersonsList
+        }
+        
+        let managedContext = per.viewContext
+        
+        let fetchRequest: NSFetchRequest<Person> = Person.fetchRequest()
+        
+        let sortDescriptor: NSSortDescriptor
+        
+        switch criteria {
+            case .profession:
+                sortDescriptor = NSSortDescriptor(key: "profession", ascending: true)
+            case .name:
+                sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+            case .email:
+                sortDescriptor = NSSortDescriptor(key: "email", ascending: true)
+            case .employed:
+                sortDescriptor = NSSortDescriptor(key: "employed", ascending: true)
+            case .all: // Handle the .all case, even if it's not needed for sorting
+                sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+                
+        }
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            let persons = try managedContext.fetch(fetchRequest)
+            var sectionedPersonsDictionary = [String: [Person]]()
+            
+            for person in persons {
+                let sectioner: String
+                
+                switch criteria {
+                    case .profession:
+                        sectioner = person.profession ?? "Unknown"
+                    case .name:
+                        sectioner = person.name ?? "Unknown"
+                    case .email:
+                        sectioner = person.email ?? "Unknown"
+                    case .employed:
+                        sectioner = person.employed ? "Employed" : "Unemployed"
+                    case .all: // Handle the .all case, even if it's not needed for sorting
+                        sectioner = person.name ?? "Unknown"
+                        
+                }
+                
+                if sectionedPersonsDictionary[sectioner] == nil {
+                    sectionedPersonsDictionary[sectioner] = [Person]()
+                }
+                
+                sectionedPersonsDictionary[sectioner]?.append(person)
+            }
+            
+            for (sectioner, personsInSection) in sectionedPersonsDictionary {
+                let sectionedPersons = SectionedPersons(sectioner: sectioner, persons: personsInSection)
+                sectionedPersonsList.append(sectionedPersons)
+            }
+            
+            return sectionedPersonsList
+        } catch let error as NSError {
+            debugPrint("Error fetching data: \(error.localizedDescription)")
+            return nil
+        }
+    }
     
     private func loadPersons() {
         guard let per = persistentContainer else{
@@ -110,7 +116,7 @@ class PersonViewModel: ObservableObject {
             debugPrint("Error fetching data: \(error.localizedDescription)")
         }
     }
-
+    
     func savePerson(nameValue: String, emailValue: String, phoneValue: String, professionValue: String, isEmployed: Bool) {
         guard let per = persistentContainer else{
             return
@@ -123,7 +129,7 @@ class PersonViewModel: ObservableObject {
         person.phoneNumber = phoneValue
         person.profession = professionValue
         person.employed = isEmployed
-
+        
         do {
             try managedContext.save()
             self.loadPersons() // Reload data after saving
@@ -136,34 +142,34 @@ class PersonViewModel: ObservableObject {
             return
         }
         let managedContext = per.viewContext
-         person.name = nameValue
-         person.email = emailValue
-         person.phoneNumber = phoneValue
-         person.profession = professionValue
-         person.employed = isEmployed
-
-         do {
-             try managedContext.save()
-             self.loadPersons() // Reload data after updating
-         } catch let error as NSError {
-             debugPrint("Error updating data: \(error.localizedDescription)")
-         }
-     }
-     
-     func deletePerson(_ person: Person) {
-         guard let per = persistentContainer else{
-             return
-         }
-         let managedContext = per.viewContext
-
-         do {
-             managedContext.delete(person)
-             try managedContext.save()
-             self.loadPersons() // Reload data after deleting
-         } catch let error as NSError {
-             debugPrint("Error deleting data: \(error.localizedDescription)")
-         }
-     }
+        person.name = nameValue
+        person.email = emailValue
+        person.phoneNumber = phoneValue
+        person.profession = professionValue
+        person.employed = isEmployed
+        
+        do {
+            try managedContext.save()
+            self.loadPersons() // Reload data after updating
+        } catch let error as NSError {
+            debugPrint("Error updating data: \(error.localizedDescription)")
+        }
+    }
+    
+    func deletePerson(_ person: Person) {
+        guard let per = persistentContainer else{
+            return
+        }
+        let managedContext = per.viewContext
+        
+        do {
+            managedContext.delete(person)
+            try managedContext.save()
+            self.loadPersons() // Reload data after deleting
+        } catch let error as NSError {
+            debugPrint("Error deleting data: \(error.localizedDescription)")
+        }
+    }
     
 }
 

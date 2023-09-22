@@ -15,7 +15,7 @@ struct EditPersonView: View {
     @State private var profession: String
     @State private var isEmployed: Bool
     let person: Person
-
+    
     init(viewModel: PersonViewModel, person: Person) {
         self.viewModel = viewModel
         self._name = State(initialValue: person.name ?? "")
@@ -25,7 +25,7 @@ struct EditPersonView: View {
         self._isEmployed = State(initialValue: person.employed)
         self.person = person
     }
-
+    
     var body: some View {
         Form {
             TextField("Name", text: $name)
@@ -40,8 +40,8 @@ struct EditPersonView: View {
             .onTapGesture {
                 viewModel.updatePerson(person, with: name, emailValue: email, phoneValue: phoneNumber, professionValue: profession, isEmployed: isEmployed)
                 self.presentationMode.wrappedValue.dismiss()
-             }
-        
+            }
+            
             .padding(.all, 20.0)
             
             .font(.subheadline)
@@ -49,13 +49,13 @@ struct EditPersonView: View {
             .foregroundColor(.white)
             .background(
                 Color.blue
-                 .shadow(radius: 10)
-             )
+                    .shadow(radius: 10)
+            )
             .cornerRadius(/*@START_MENU_TOKEN@*/15.0/*@END_MENU_TOKEN@*/)
             .shadow(radius: /*@START_MENU_TOKEN@*/14/*@END_MENU_TOKEN@*/)
         }
         .frame(height: 350)
         .scrollContentBackground(.hidden)
-           
+        
     }
 }
