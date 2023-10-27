@@ -42,17 +42,14 @@ struct EditPersonView: View {
                 self.presentationMode.wrappedValue.dismiss()
             }
             
-            .padding(.all, 20.0)
-            
-            .font(.subheadline)
-            .fontWeight(.semibold)
+            .frame(height: 56)
+            .frame(maxWidth: .infinity)
             .foregroundColor(.white)
+            .font(.headline)
             .background(
                 Color.blue
-                    .shadow(radius: 10)
             )
-            .cornerRadius(/*@START_MENU_TOKEN@*/15.0/*@END_MENU_TOKEN@*/)
-            .shadow(radius: /*@START_MENU_TOKEN@*/14/*@END_MENU_TOKEN@*/)
+            .cornerRadius(16)
         }
 //        .grayscale(0.20)
 //        .font(.subheadline)

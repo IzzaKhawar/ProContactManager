@@ -20,17 +20,20 @@ struct PersonView: View {
         NavigationView {
             VStack {
                 // Picker to select the sectioning criteria
+//
                 Picker("Section By:", selection: $selectedCase) {
                     ForEach([ListView.all,
                              ListView.name,
                              ListView.email,
                              ListView.profession,
                              ListView.employed], id: \.self) { criteria in
-                        Text(criteria.rawValue.capitalized).tag(criteria)
+                        Text(criteria.rawValue.capitalized)
+                            .tag(criteria)
+                            
                     }
                 }
-                .padding(.horizontal, 10.0)
-                .frame(height: 20, alignment: .top)
+                .padding(.horizontal, 4.0)
+                .frame(height: 36, alignment: .top)
                 .pickerStyle(SegmentedPickerStyle())
                 .navigationTitle("Persons")
                 .toolbar {
@@ -38,6 +41,7 @@ struct PersonView: View {
                         Image(systemName: "plus")
                     })
                 }
+                .font(.headline)
                 
                 if selectedCase.rawValue == "all" {
                     List {
@@ -45,24 +49,27 @@ struct PersonView: View {
                             VStack {
                                 PersonInfoView(person: person)
                                 Spacer()
-                                ActionButtonsView(viewModel: viewModel, person: person)
+                                ActionButtonsView(viewModel: viewModel,  person: person)
                                 
                             }
                             .id(person.id)
                         }
-                    }
+                    }.scrollContentBackground(.hidden)
                 } else {
                     List {
                         ForEach(sectionedPersons, id: \.sectioner) { section in
                             Section(header: Text(section.sectioner)
-                                .font(.headline)
+                                .font(.system(size: 20))
                                 .fontWeight(.bold)
                                 .foregroundColor(Color.black)
+                                .underline(true, pattern: .solid , color: Color.black)
                             ) {
                                 ForEach(section.persons, id: \.id) { person in
                                     VStack {
                                         PersonInfoView(person: person)
+                                        
                                         Spacer()
+                                        
                                         ActionButtonsView(viewModel: viewModel, person: person)
                                         
                                     }
@@ -70,7 +77,7 @@ struct PersonView: View {
                                 }
                             }
                         }
-                    }
+                    }.scrollContentBackground(.hidden)
                 }
             }
         }
@@ -99,46 +106,36 @@ struct PersonInfoView: View {
             Spacer()
             Text(person.employed ? "Employed" : "Unemployed")
         }
+        .frame(height: 24)
+        
+        .font(.system(size: 18))
         .scrollContentBackground(.hidden)
         
     }
 }
 
-//struct FillButton: View {
-//    let title: String
-//    let color: Color
-//    let onSubmit: () -> Void
-//    var body: some View {
-//        Button(action: {onSubmit()}, label: {
-//            Text(title)
-//                .frame(height: 56)
-//                .frame(maxWidth: .infinity)
-//                .background(color)
-//                .cornerRadius(16)
-//                .foregroundColor(.white)
-//                .font(.headline)
-//        })
-//    }
-//}
+
+
 struct ActionButtonsView: View {
     @ObservedObject var viewModel: PersonViewModel
     @State private var userSelected: Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State private var selectedPerson: Person?
+    @State private var personToDelete: Person?
     @State private var isDeleted: Bool = false
-    var person: Person
+    @State var person: Person
     
     var body: some View {
-        HStack (alignment: .center, spacing: 4, content: {
-            
-            Button(action: {
+        HStack (alignment: .center, spacing: 10, content: {
+           
+            Button{
                 // Set the selectedPerson when the Edit button is pressed
                 self.selectedPerson = person
                 // Trigger the navigation by setting userSelected to true
                 self.userSelected.toggle()
                 self.presentationMode.wrappedValue.dismiss()
-            }) {
-                Text("Edit")
+            } label: {
+                Label("Edit", systemImage: "pencil")
                     .frame(height: 56)
                     .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
@@ -151,27 +148,41 @@ struct ActionButtonsView: View {
                 
             }
             .buttonStyle(PlainButtonStyle())
-            Button(action: {
-                viewModel.deletePerson(person)
-                isDeleted.toggle()
+            
+            
+            
+            Spacer()
+            
+            Button {
+                // Action on button click
+                self.personToDelete = person
+                self.isDeleted.toggle()
                 self.presentationMode.wrappedValue.dismiss()
-            }) {
-                Text("Delete")
+                if personToDelete?.id != nil, isDeleted {
+                    viewModel.deletePerson(personToDelete ?? person)
+                }
+            } label: {
+                Label("Delete", systemImage: "trash")
                     .frame(height: 56)
                     .frame(maxWidth: .infinity)
                     .foregroundColor(.white)
                     .font(.headline)
-                    .background(
-                        Color.red
-                    )
+                    .background(Color.red)
                     .cornerRadius(16)
-
-                
             }
+            .buttonStyle(PlainButtonStyle())
             
         })
-        NavigationLink("",destination: EditPersonView(viewModel: viewModel, person: selectedPerson ?? person), isActive: $userSelected)
         
+        if selectedPerson?.id != nil{
+            NavigationLink("",destination: EditPersonView(viewModel: viewModel, person: selectedPerson ?? person ), isActive: $userSelected)
+                .hidden()
+        }
+        
+    }
+    
+    func  deletePerson(person:Person){
+        viewModel.deletePerson(person)
     }
 }
 struct PersonView_Previews: PreviewProvider {

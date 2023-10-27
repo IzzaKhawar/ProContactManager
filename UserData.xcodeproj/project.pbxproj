@@ -63,11 +63,11 @@
 			children = (
 				18F100142AB42CE400038CAE /* UserDataApp.swift */,
 				18F100162AB42CE400038CAE /* ContentView.swift */,
+				18A78D312AB4762F008D5EEC /* AddUserView.swift */,
+				18F100242AB42F1E00038CAE /* PersonViewModel.swift */,
+				185F83982ABACBCC00B5132E /* EditPersonView.swift */,
 				18F100182AB42CE600038CAE /* Assets.xcassets */,
 				18F1001A2AB42CE600038CAE /* Preview Content */,
-				18A78D312AB4762F008D5EEC /* AddUserView.swift */,
-				185F83982ABACBCC00B5132E /* EditPersonView.swift */,
-				18F100242AB42F1E00038CAE /* PersonViewModel.swift */,
 				18B678C32AB822FE009EEABF /* PersonModel.xcdatamodeld */,
 			);
 			path = UserData;
