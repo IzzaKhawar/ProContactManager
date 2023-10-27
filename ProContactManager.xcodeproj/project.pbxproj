@@ -10,7 +10,7 @@
 		185F83992ABACBCC00B5132E /* EditPersonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185F83982ABACBCC00B5132E /* EditPersonView.swift */; };
 		18A78D322AB4762F008D5EEC /* AddUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A78D312AB4762F008D5EEC /* AddUserView.swift */; };
 		18B678C52AB822FE009EEABF /* PersonModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 18B678C32AB822FE009EEABF /* PersonModel.xcdatamodeld */; };
-		18F100152AB42CE400038CAE /* UserDataApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F100142AB42CE400038CAE /* UserDataApp.swift */; };
+		18F100152AB42CE400038CAE /* ProContactManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F100142AB42CE400038CAE /* ProContactManagerApp.swift */; };
 		18F100172AB42CE400038CAE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F100162AB42CE400038CAE /* ContentView.swift */; };
 		18F100252AB42F1E00038CAE /* PersonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F100242AB42F1E00038CAE /* PersonViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -21,8 +21,8 @@
 		18B678C42AB822FE009EEABF /* PersonModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PersonModel.xcdatamodel; sourceTree = "<group>"; };
 		18B678CA2AB823BA009EEABF /* Person+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataClass.swift"; sourceTree = "<group>"; };
 		18B678CB2AB823BA009EEABF /* Person+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Person+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		18F100112AB42CE400038CAE /* UserData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UserData.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		18F100142AB42CE400038CAE /* UserDataApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataApp.swift; sourceTree = "<group>"; };
+		18F100112AB42CE400038CAE /* ProContactManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProContactManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		18F100142AB42CE400038CAE /* ProContactManagerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProContactManagerApp.swift; sourceTree = "<group>"; };
 		18F100162AB42CE400038CAE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		18F100182AB42CE600038CAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18F1001B2AB42CE600038CAE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -45,7 +45,7 @@
 			children = (
 				18B678CA2AB823BA009EEABF /* Person+CoreDataClass.swift */,
 				18B678CB2AB823BA009EEABF /* Person+CoreDataProperties.swift */,
-				18F100132AB42CE400038CAE /* UserData */,
+				18F100132AB42CE400038CAE /* ProContactManager */,
 				18F100122AB42CE400038CAE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -53,15 +53,15 @@
 		18F100122AB42CE400038CAE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				18F100112AB42CE400038CAE /* UserData.app */,
+				18F100112AB42CE400038CAE /* ProContactManager.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		18F100132AB42CE400038CAE /* UserData */ = {
+		18F100132AB42CE400038CAE /* ProContactManager */ = {
 			isa = PBXGroup;
 			children = (
-				18F100142AB42CE400038CAE /* UserDataApp.swift */,
+				18F100142AB42CE400038CAE /* ProContactManagerApp.swift */,
 				18F100162AB42CE400038CAE /* ContentView.swift */,
 				18A78D312AB4762F008D5EEC /* AddUserView.swift */,
 				18F100242AB42F1E00038CAE /* PersonViewModel.swift */,
@@ -70,7 +70,7 @@
 				18F1001A2AB42CE600038CAE /* Preview Content */,
 				18B678C32AB822FE009EEABF /* PersonModel.xcdatamodeld */,
 			);
-			path = UserData;
+			path = ProContactManager;
 			sourceTree = "<group>";
 		};
 		18F1001A2AB42CE600038CAE /* Preview Content */ = {
@@ -84,9 +84,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		18F100102AB42CE400038CAE /* UserData */ = {
+		18F100102AB42CE400038CAE /* ProContactManager */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 18F1001F2AB42CE600038CAE /* Build configuration list for PBXNativeTarget "UserData" */;
+			buildConfigurationList = 18F1001F2AB42CE600038CAE /* Build configuration list for PBXNativeTarget "ProContactManager" */;
 			buildPhases = (
 				18F1000D2AB42CE400038CAE /* Sources */,
 				18F1000E2AB42CE400038CAE /* Frameworks */,
@@ -96,9 +96,9 @@
 			);
 			dependencies = (
 			);
-			name = UserData;
+			name = ProContactManager;
 			productName = UserData;
-			productReference = 18F100112AB42CE400038CAE /* UserData.app */;
+			productReference = 18F100112AB42CE400038CAE /* ProContactManager.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -116,7 +116,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 18F1000C2AB42CE400038CAE /* Build configuration list for PBXProject "UserData" */;
+			buildConfigurationList = 18F1000C2AB42CE400038CAE /* Build configuration list for PBXProject "ProContactManager" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -129,7 +129,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				18F100102AB42CE400038CAE /* UserData */,
+				18F100102AB42CE400038CAE /* ProContactManager */,
 			);
 		};
 /* End PBXProject section */
@@ -153,7 +153,7 @@
 				18A78D322AB4762F008D5EEC /* AddUserView.swift in Sources */,
 				18F100172AB42CE400038CAE /* ContentView.swift in Sources */,
 				185F83992ABACBCC00B5132E /* EditPersonView.swift in Sources */,
-				18F100152AB42CE400038CAE /* UserDataApp.swift in Sources */,
+				18F100152AB42CE400038CAE /* ProContactManagerApp.swift in Sources */,
 				18F100252AB42F1E00038CAE /* PersonViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -286,10 +286,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"UserData/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"ProContactManager/Preview Content\"";
 				DEVELOPMENT_TEAM = W2M37Q9VXH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "ProContact Manager";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -300,7 +301,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Khawar.Izza.UserData;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Khawar.Izza.ProContactManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -315,10 +316,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"UserData/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"ProContactManager/Preview Content\"";
 				DEVELOPMENT_TEAM = W2M37Q9VXH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "ProContact Manager";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -329,7 +331,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Khawar.Izza.UserData;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Khawar.Izza.ProContactManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -340,7 +342,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		18F1000C2AB42CE400038CAE /* Build configuration list for PBXProject "UserData" */ = {
+		18F1000C2AB42CE400038CAE /* Build configuration list for PBXProject "ProContactManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				18F1001D2AB42CE600038CAE /* Debug */,
@@ -349,7 +351,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		18F1001F2AB42CE600038CAE /* Build configuration list for PBXNativeTarget "UserData" */ = {
+		18F1001F2AB42CE600038CAE /* Build configuration list for PBXNativeTarget "ProContactManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				18F100202AB42CE600038CAE /* Debug */,

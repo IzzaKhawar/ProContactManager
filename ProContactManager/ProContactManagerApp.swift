@@ -2,7 +2,7 @@ import SwiftUI
 import CoreData
 
 @main
-struct UserDataApp: App {
+struct ProContactManagerApp: App {
     
     var body: some Scene {
         WindowGroup {
