@@ -35,7 +35,7 @@ struct PersonView: View {
                 .padding(.horizontal, 4.0)
                 .frame(height: 36, alignment: .top)
                 .pickerStyle(SegmentedPickerStyle())
-                .navigationTitle("Persons")
+                .navigationTitle("Contacts")
                 .toolbar {
                     NavigationLink(destination: AddUserView(viewModel: viewModel), label: {
                         Image(systemName: "plus")
